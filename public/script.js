@@ -239,6 +239,41 @@ function addColumn() {
     updateStatusMessage(`已添加第 ${tableState.cols} 列`);
 }
 
+// 删除一行（最后一行）
+function deleteRow() {
+    if (tableState.rows <= 1) {
+        updateStatusMessage('至少保留一行');
+        return;
+    }
+    tableState.rows--;
+    tableState.data.pop(); // 移除最后一行
+    updateBody();
+    updateStatus();
+    scheduleAutoSave();
+    updateStatusMessage(`已删除第 ${tableState.rows + 1} 行`);
+}
+
+// 删除一列（最后一列）
+function deleteColumn() {
+    if (tableState.cols <= 1) {
+        updateStatusMessage('至少保留一列');
+        return;
+    }
+    tableState.cols--;
+    tableState.headers.pop(); // 移除最后一列的表头
+    // 为每一行移除最后一列数据
+    for (let row = 0; row < tableState.rows; row++) {
+        if (tableState.data[row]) {
+            tableState.data[row].pop();
+        }
+    }
+    updateHeader();
+    updateBody();
+    updateStatus();
+    scheduleAutoSave();
+    updateStatusMessage(`已删除第 ${tableState.cols + 1} 列`);
+}
+
 // 清空表格
 function clearTable() {
     if (!confirm('确定要清空整个表格吗？所有数据将丢失。')) return;
@@ -422,7 +457,9 @@ function toggleAutoSave() {
 
 // 事件监听器绑定
 document.getElementById('addRow').addEventListener('click', addRow);
+document.getElementById('deleteRow').addEventListener('click', deleteRow);
 document.getElementById('addCol').addEventListener('click', addColumn);
+document.getElementById('deleteCol').addEventListener('click', deleteColumn);
 document.getElementById('clearBtn').addEventListener('click', clearTable);
 document.getElementById('loadBtn').addEventListener('click', loadFromServer);
 document.getElementById('exportBtn').addEventListener('click', exportData);
