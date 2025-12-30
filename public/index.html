@@ -8,7 +8,28 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <div class="app-container">
+    <!-- 密码保护层 -->
+    <div id="passwordOverlay" class="password-overlay">
+        <div class="password-modal">
+            <div class="password-header">
+                <i class="fas fa-lock"></i>
+                <h2>需要密码访问</h2>
+            </div>
+            <div class="password-body">
+                <p>请输入密码以访问在线表格编辑器</p>
+                <input type="password" id="passwordInput" placeholder="输入密码" autocomplete="off" />
+                <button id="passwordSubmit" class="btn btn-primary">
+                    <i class="fas fa-unlock"></i> 进入
+                </button>
+                <div id="passwordError" class="password-error"></div>
+            </div>
+            <div class="password-footer">
+                <small>密码提示: 青青</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="app-container" style="display: none;">
         <!-- 顶部工具栏 -->
         <div class="toolbar">
             <div class="app-title">
@@ -19,13 +40,13 @@
             
             <div class="toolbar-buttons">
                 <div class="button-group">
-                    <button id="addRow" class="btn btn-primary" title="添加一行 (Ctrl+R)">
+                    <button id="addRow" class="btn btn-primary" title="添加一行 (Ctrl+Shift+R)">
                         <i class="fas fa-plus"></i> 添加行
                     </button>
                     <button id="deleteRow" class="btn btn-danger" title="删除最后一行">
                         <i class="fas fa-minus"></i> 删除行
                     </button>
-                    <button id="addCol" class="btn btn-primary" title="添加一列 (Ctrl+C)">
+                    <button id="addCol" class="btn btn-primary" title="添加一列 (Ctrl+Shift+C)">
                         <i class="fas fa-plus"></i> 添加列
                     </button>
                     <button id="deleteCol" class="btn btn-danger" title="删除最后一列">

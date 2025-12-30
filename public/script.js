@@ -1,3 +1,47 @@
+// 密码验证
+const PASSWORD = 'qingqing';
+const passwordOverlay = document.getElementById('passwordOverlay');
+const passwordInput = document.getElementById('passwordInput');
+const passwordSubmit = document.getElementById('passwordSubmit');
+const passwordError = document.getElementById('passwordError');
+const appContainer = document.querySelector('.app-container');
+
+// 检查是否已通过验证
+if (localStorage.getItem('tableAuth') === 'true') {
+    // 已认证，隐藏覆盖层并显示应用
+    passwordOverlay.style.display = 'none';
+    appContainer.style.display = 'flex';
+} else {
+    // 显示密码覆盖层
+    passwordOverlay.style.display = 'flex';
+    appContainer.style.display = 'none';
+}
+
+// 密码提交事件
+passwordSubmit.addEventListener('click', checkPassword);
+passwordInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+        checkPassword();
+    }
+});
+
+function checkPassword() {
+    const input = passwordInput.value.trim();
+    if (input === PASSWORD) {
+        // 密码正确
+        localStorage.setItem('tableAuth', 'true');
+        passwordOverlay.style.display = 'none';
+        appContainer.style.display = 'flex';
+        // 初始化表格
+        initTable();
+    } else {
+        // 密码错误
+        passwordError.textContent = '密码错误，请重试';
+        passwordInput.value = '';
+        passwordInput.focus();
+    }
+}
+
 // 表格数据状态
 let tableState = {
     rows: 5,
@@ -465,7 +509,12 @@ document.getElementById('copyApiBtn').addEventListener('click', copyApiUrl);
 document.getElementById('autoSaveToggle').addEventListener('click', toggleAutoSave);
 
 // 初始化
-document.addEventListener('DOMContentLoaded', initTable);
+document.addEventListener('DOMContentLoaded', () => {
+    // 如果已经通过认证，初始化表格
+    if (localStorage.getItem('tableAuth') === 'true') {
+        initTable();
+    }
+});
 
 // 键盘快捷键
 document.addEventListener('keydown', (e) => {
