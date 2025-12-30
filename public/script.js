@@ -481,14 +481,14 @@ document.addEventListener('keydown', (e) => {
         loadFromServer();
     }
     
-    // Ctrl+R 添加行
-    if (e.ctrlKey && e.key === 'r') {
+    // Ctrl+Shift+R 添加行
+    if (e.ctrlKey && e.shiftKey && e.key === 'R') {
         e.preventDefault();
         addRow();
     }
     
-    // Ctrl+C 添加列
-    if (e.ctrlKey && e.key === 'c') {
+    // Ctrl+Shift+C 添加列
+    if (e.ctrlKey && e.shiftKey && e.key === 'C') {
         e.preventDefault();
         addColumn();
     }
