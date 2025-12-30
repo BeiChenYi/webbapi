@@ -99,7 +99,6 @@ function startEditHeader(th) {
     const input = document.createElement('input');
     input.type = 'text';
     input.value = currentValue;
-    input.maxLength = 20;
     
     // 保存编辑
     input.addEventListener('keydown', (e) => {
@@ -157,7 +156,6 @@ function startEditCell(td) {
     const input = document.createElement('input');
     input.type = 'text';
     input.value = currentValue;
-    input.maxLength = 100;
     
     // 保存编辑
     input.addEventListener('keydown', (e) => {
