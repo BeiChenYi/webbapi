@@ -133,6 +133,18 @@ install_dependencies() {
     fi
 }
 
+# 修复数据文件权限
+fix_permissions() {
+    print_info "修复数据文件权限..."
+    if [ -f "$APP_DIR/data.json" ]; then
+        chown "$APP_USER:$APP_USER" "$APP_DIR/data.json"
+        chmod 644 "$APP_DIR/data.json"
+        print_info "data.json 权限已修复"
+    else
+        print_warn "data.json 不存在，跳过权限修复"
+    fi
+}
+
 # 重启服务
 restart_service() {
     print_info "重启服务..."
@@ -195,6 +207,7 @@ main() {
     backup_data
     pull_latest_code
     install_dependencies
+    fix_permissions
     restart_service
     show_update_info
     
