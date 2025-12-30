@@ -316,6 +316,63 @@ function deleteColumn() {
     updateStatusMessage(`已删除第 ${tableState.cols + 1} 列`);
 }
 
+// 删除指定行
+function deleteSpecificRow() {
+    if (tableState.rows <= 1) {
+        updateStatusMessage('至少保留一行');
+        return;
+    }
+    const rowNum = prompt(`请输入要删除的行号 (1-${tableState.rows}):`);
+    if (rowNum === null) return; // 用户取消
+    
+    const rowIndex = parseInt(rowNum) - 1;
+    if (isNaN(rowIndex) || rowIndex < 0 || rowIndex >= tableState.rows) {
+        updateStatusMessage('无效的行号');
+        return;
+    }
+    
+    // 从数据中移除该行
+    tableState.data.splice(rowIndex, 1);
+    tableState.rows--;
+    
+    updateBody();
+    updateStatus();
+    scheduleAutoSave();
+    updateStatusMessage(`已删除第 ${rowNum} 行`);
+}
+
+// 删除指定列
+function deleteSpecificColumn() {
+    if (tableState.cols <= 1) {
+        updateStatusMessage('至少保留一列');
+        return;
+    }
+    const colNum = prompt(`请输入要删除的列号 (1-${tableState.cols}):`);
+    if (colNum === null) return; // 用户取消
+    
+    const colIndex = parseInt(colNum) - 1;
+    if (isNaN(colIndex) || colIndex < 0 || colIndex >= tableState.cols) {
+        updateStatusMessage('无效的列号');
+        return;
+    }
+    
+    // 从表头中移除该列
+    tableState.headers.splice(colIndex, 1);
+    // 从每一行数据中移除该列
+    for (let row = 0; row < tableState.rows; row++) {
+        if (tableState.data[row]) {
+            tableState.data[row].splice(colIndex, 1);
+        }
+    }
+    tableState.cols--;
+    
+    updateHeader();
+    updateBody();
+    updateStatus();
+    scheduleAutoSave();
+    updateStatusMessage(`已删除第 ${colNum} 列`);
+}
+
 // 清空表格
 function clearTable() {
     if (!confirm('确定要清空整个表格吗？所有数据将丢失。')) return;
@@ -500,8 +557,10 @@ function toggleAutoSave() {
 // 事件监听器绑定
 document.getElementById('addRow').addEventListener('click', addRow);
 document.getElementById('deleteRow').addEventListener('click', deleteRow);
+document.getElementById('deleteSpecificRow').addEventListener('click', deleteSpecificRow);
 document.getElementById('addCol').addEventListener('click', addColumn);
 document.getElementById('deleteCol').addEventListener('click', deleteColumn);
+document.getElementById('deleteSpecificCol').addEventListener('click', deleteSpecificColumn);
 document.getElementById('clearBtn').addEventListener('click', clearTable);
 document.getElementById('loadBtn').addEventListener('click', loadFromServer);
 document.getElementById('exportBtn').addEventListener('click', exportData);
